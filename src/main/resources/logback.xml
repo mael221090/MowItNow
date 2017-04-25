@@ -1,0 +1,10 @@
+<configuration>
+
+    <include resource="logback-appenders.xml" />
+
+    <root level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+    </root>
+
+</configuration>

@@ -1,28 +1,17 @@
 package com.xebia.actors
 
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
 import com.xebia.constants.Move._
 import com.xebia.constants.{Move, Orientation}
 import com.xebia.models.{LaunchMowing, _}
 import com.xebia.modules.{AkkaModule, ApplicationModule}
 import org.scalatest.{BeforeAndAfterAll, GivenWhenThen, MustMatchers, WordSpecLike}
-import scaldi.Module
-import scaldi.akka.AkkaInjectable
-
-import scala.concurrent.duration._
 
 class MowItNowActorTest extends TestKit(ActorSystem("testSystem"))
   with ImplicitSender with WordSpecLike with MustMatchers with GivenWhenThen  with BeforeAndAfterAll {
 
-  def akkaTestModule = new Module {
-    bind [ActorRef] identifiedBy 'mowerActorRef to {
-      AkkaInjectable.injectActorRef[MowerActor]
-    }
-    bind[ActorRef] identifiedBy 'mowerActorRef to inject[TestProbe]('probeForB).ref
-  }
-
-  implicit val testModule = new ApplicationModule ++ new AkkaModule ++ akkaTestModule
+  implicit val testModule = new ApplicationModule ++ new AkkaModule
 
   override def afterAll {
     TestKit.shutdownActorSystem(system)
@@ -31,7 +20,6 @@ class MowItNowActorTest extends TestKit(ActorSystem("testSystem"))
   "A MowItNowActor" must {
     Given("A MowerActor instantiation")
     val actorRef = TestActorRef(new MowItNowActor())
-    val mowerActor = TestProbe()
 
     Given("A pitch, a mower and instructions")
     val pitch = Pitch(5, 5)
@@ -45,14 +33,10 @@ class MowItNowActorTest extends TestKit(ActorSystem("testSystem"))
       Then("The actor should print a message, that's it")
       expectNoMsg()
 
+      When("The actor receive instruction to start mowing")
       actorRef ! LaunchMowing(mower, instructions, pitch)
+      Then("The router must have one routee")
       actorRef.underlyingActor.router.routees.length mustBe 1
-
-      //mowerActor.expectMsg(2 seconds, StartInstructions)
-
-      actorRef ! FinishedMowing()
-      //expectMsgType[PoisonPill]
-      //actorRef.underlyingActor.router.routees.length mustBe 0
 
     }
 

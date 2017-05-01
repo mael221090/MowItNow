@@ -1,7 +1,7 @@
 package com.xebia.actors
 
 import akka.actor.{Actor, ActorLogging}
-import com.xebia.models.Mower
+import com.xebia.models.{CommunicatePosition, Mower, StartInstructions}
 
 import scala.collection.mutable.ListBuffer
 
@@ -30,7 +30,7 @@ class MowerActor extends Actor with ActorLogging {
       // send back position to master
       sender ! CommunicatePosition(mower)
     }
-      // when receiving this message, append the mower to the internal list of this actor only if it is not
+      // when receiving this message, append the mower to the internal list of this actor only if it is not the internal mower
     case CommunicatePosition(mower) =>
       if(mower != mowerInternalState) {
         mowersList += mower

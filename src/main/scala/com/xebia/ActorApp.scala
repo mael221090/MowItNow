@@ -4,8 +4,9 @@ import java.io.File
 
 import akka.actor.ActorSystem
 import com.typesafe.scalalogging.LazyLogging
-import com.xebia.actors.{BroadcastPosition, FinishedMowing, LaunchMowing, MowItNowActor}
+import com.xebia.actors.MowItNowActor
 import com.xebia.exceptions.FileParserException
+import com.xebia.models.{BroadcastPosition, FinishedMowing, LaunchMowing}
 import com.xebia.modules.{AkkaModule, ApplicationModule}
 import com.xebia.services.MowerParser
 import scaldi.akka.AkkaInjectable

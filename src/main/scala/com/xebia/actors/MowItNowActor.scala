@@ -2,6 +2,7 @@ package com.xebia.actors
 
 import akka.actor.{Actor, ActorLogging, PoisonPill, Terminated}
 import akka.routing._
+import com.xebia.models._
 import scaldi.Injector
 import scaldi.akka.AkkaInjectable
 

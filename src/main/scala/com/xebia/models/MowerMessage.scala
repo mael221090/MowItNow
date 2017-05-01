@@ -1,6 +1,4 @@
-package com.xebia.actors
-
-import com.xebia.models.{Instructions, Mower, Pitch}
+package com.xebia.models
 
 sealed trait MowerMessage
 
